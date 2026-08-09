@@ -40,7 +40,12 @@ export async function handleDialoguePrompt(
   sessionId: string,
   prompt: string,
 ): Promise<void> {
-  if (!dialogueManager.isActive() || !dialogueManager.matchesSession(sessionId)) {
+  const active = dialogueManager.isActive();
+  const match = dialogueManager.matchesSession(sessionId);
+  logger.debug(
+    `[Dialogue] handleDialoguePrompt: active=${active}, sessionMatch=${match}, prompt="${prompt.slice(0, 60)}"`,
+  );
+  if (!active || !match) {
     return;
   }
 
@@ -70,7 +75,12 @@ export function streamDialogueReply(
   sessionId: string,
   replyText: string,
 ): void {
-  if (!dialogueManager.isActive() || !dialogueManager.matchesSession(sessionId)) {
+  const active = dialogueManager.isActive();
+  const match = dialogueManager.matchesSession(sessionId);
+  logger.debug(
+    `[Dialogue] streamDialogueReply: active=${active}, sessionMatch=${match}, replyLen=${replyText.length}`,
+  );
+  if (!active || !match) {
     return;
   }
 
