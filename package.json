@@ -1,6 +1,6 @@
 {
   "name": "omo-telegram-bot",
-  "version": "0.23.1-omo.1",
+  "version": "0.23.1-omo.2",
   "description": "oh-my-openagent-aware Telegram client for OpenCode to run and monitor coding tasks from chat. Forked from grinev/opencode-telegram-bot.",
   "type": "module",
   "main": "./dist/index.js",
