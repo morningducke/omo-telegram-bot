@@ -1,4 +1,6 @@
 import { opencodeClient } from "../../opencode/client.js";
+import { shouldHideHarnessMessages } from "../stores/settings-store.js";
+import { isHarnessMessage, type HarnessMessageLike } from "../../utils/harness-filter.js";
 import { logger } from "../../utils/logger.js";
 
 const LATEST_ASSISTANT_RESPONSE_MESSAGES_LIMIT = 20;
@@ -18,7 +20,7 @@ type SessionMessageLike = {
       created?: number;
     };
   };
-  parts: Array<{ type: string; text?: string }>;
+  parts: Array<{ type: string; text?: string; metadata?: Record<string, unknown> }>;
 };
 
 function extractTextParts(parts: Array<{ type: string; text?: string }>): string | null {
@@ -51,9 +53,15 @@ export async function loadUserMessages(
 
   const revertMessageID = sessionData?.revert?.messageID;
 
+  const hideHarness = shouldHideHarnessMessages();
+
   const messages = (data as SessionMessageLike[])
     .map((message) => {
       if (message.info.role !== "user") {
+        return null;
+      }
+
+      if (hideHarness && isHarnessMessage(message as HarnessMessageLike)) {
         return null;
       }
 

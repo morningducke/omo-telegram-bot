@@ -167,6 +167,7 @@ export const it: I18nDictionary = {
   "settings.assistant_footer.label": "Footer dell'assistente",
   "settings.tts.label": "Risposte audio",
   "settings.prompt_queue.label": "Coda messaggi",
+  "settings.harness_messages.label": "Show harness messages",
   "settings.value.on": "On",
   "settings.value.off": "Off",
   "settings.saved": "✅ Impostazione salvata.",

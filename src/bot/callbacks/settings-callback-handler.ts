@@ -6,6 +6,7 @@ import {
   getResponseStreamingMode,
   getSendDiffFileAttachments,
   getShowAssistantRunFooter,
+  getShowHarnessMessages,
   getShowThinkingContent,
   getTtsMode,
   setCompactOutputMode,
@@ -13,6 +14,7 @@ import {
   setResponseStreamingMode,
   setSendDiffFileAttachments,
   setShowAssistantRunFooter,
+  setShowHarnessMessages,
   setShowThinkingContent,
   setTtsMode,
   type ResponseStreamingMode,
@@ -28,6 +30,7 @@ import {
   SETTINGS_COMPACT_OUTPUT_CALLBACK,
   SETTINGS_DIFF_FILES_CALLBACK,
   SETTINGS_PROMPT_QUEUE_CALLBACK,
+  SETTINGS_HARNESS_MESSAGES_CALLBACK,
   SETTINGS_RESPONSE_STREAMING_CALLBACK,
   SETTINGS_THINKING_CONTENT_CALLBACK,
   SETTINGS_TTS_CALLBACK,
@@ -116,6 +119,16 @@ export async function handleSettingsCallback(ctx: Context): Promise<boolean> {
 
     if (callbackData === SETTINGS_PROMPT_QUEUE_CALLBACK) {
       setPromptQueueEnabled(!getPromptQueueEnabled());
+      const { text, keyboard } = buildSettingsMenuView();
+      await ctx.answerCallbackQuery({ text: t("settings.saved") });
+      await ctx.editMessageText(text, {
+        reply_markup: appendInlineMenuCancelButton(keyboard, "settings"),
+      });
+      return true;
+    }
+
+    if (callbackData === SETTINGS_HARNESS_MESSAGES_CALLBACK) {
+      setShowHarnessMessages(!getShowHarnessMessages());
       const { text, keyboard } = buildSettingsMenuView();
       await ctx.answerCallbackQuery({ text: t("settings.saved") });
       await ctx.editMessageText(text, {

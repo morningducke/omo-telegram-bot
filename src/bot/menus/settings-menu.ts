@@ -5,8 +5,10 @@ import {
   getResponseStreamingMode,
   getSendDiffFileAttachments,
   getShowAssistantRunFooter,
+  getShowHarnessMessages,
   getShowThinkingContent,
   getTtsMode,
+  isHarnessFilterAvailable,
   type ResponseStreamingMode,
   type TtsMode,
 } from "../../app/stores/settings-store.js";
@@ -20,6 +22,7 @@ export const SETTINGS_DIFF_FILES_CALLBACK = `${SETTINGS_CALLBACK_PREFIX}diff_fil
 export const SETTINGS_ASSISTANT_FOOTER_CALLBACK = `${SETTINGS_CALLBACK_PREFIX}assistant_footer`;
 export const SETTINGS_TTS_CALLBACK = `${SETTINGS_CALLBACK_PREFIX}tts`;
 export const SETTINGS_PROMPT_QUEUE_CALLBACK = `${SETTINGS_CALLBACK_PREFIX}prompt_queue`;
+export const SETTINGS_HARNESS_MESSAGES_CALLBACK = `${SETTINGS_CALLBACK_PREFIX}harness_messages`;
 
 export function formatBooleanSettingValue(enabled: boolean): string {
   return enabled ? t("settings.value.on") : t("settings.value.off");
@@ -51,6 +54,7 @@ export function buildSettingsMenuView(): { text: string; keyboard: InlineKeyboar
   const showAssistantRunFooter = getShowAssistantRunFooter();
   const ttsMode = getTtsMode();
   const promptQueueEnabled = getPromptQueueEnabled();
+  const showHarnessMessages = getShowHarnessMessages();
   const keyboard = new InlineKeyboard()
     .text(
       `${t("settings.compact_output.label")}: ${formatBooleanSettingValue(compactOutputMode)}`,
@@ -87,6 +91,13 @@ export function buildSettingsMenuView(): { text: string; keyboard: InlineKeyboar
       `${t("settings.prompt_queue.label")}: ${formatBooleanSettingValue(promptQueueEnabled)}`,
       SETTINGS_PROMPT_QUEUE_CALLBACK,
     );
+
+  if (isHarnessFilterAvailable()) {
+    keyboard.row().text(
+      `${t("settings.harness_messages.label")}: ${formatBooleanSettingValue(showHarnessMessages)}`,
+      SETTINGS_HARNESS_MESSAGES_CALLBACK,
+    );
+  }
 
   return {
     text: t("settings.menu.title"),

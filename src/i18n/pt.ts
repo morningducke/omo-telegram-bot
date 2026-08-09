@@ -163,6 +163,7 @@ export const pt: I18nDictionary = {
   "settings.assistant_footer.label": "Rodapé do assistente",
   "settings.tts.label": "Respostas em áudio",
   "settings.prompt_queue.label": "Fila de mensagens",
+  "settings.harness_messages.label": "Show harness messages",
   "settings.value.on": "Ligado",
   "settings.value.off": "Desligado",
   "settings.saved": "✅ Configuração salva.",

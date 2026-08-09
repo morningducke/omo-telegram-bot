@@ -154,6 +154,7 @@ export const ru: I18nDictionary = {
   "settings.assistant_footer.label": "Футер ответа",
   "settings.tts.label": "Аудиоответы",
   "settings.prompt_queue.label": "Очередь сообщений",
+  "settings.harness_messages.label": "Сообщения харнесса",
   "settings.value.on": "Вкл",
   "settings.value.off": "Выкл",
   "settings.saved": "✅ Настройка сохранена.",

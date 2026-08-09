@@ -239,6 +239,26 @@ export function setPromptQueueEnabled(enabled: boolean): void {
   void writeSettingsFile(currentSettings);
 }
 
+export function getShowHarnessMessages(): boolean {
+  return currentSettings.showHarnessMessages ?? false;
+}
+
+export function setShowHarnessMessages(enabled: boolean): void {
+  currentSettings.showHarnessMessages = enabled;
+  void writeSettingsFile(currentSettings);
+}
+
+export function shouldHideHarnessMessages(): boolean {
+  if (!config.bot.harnessFilterEnabled) {
+    return false;
+  }
+  return !getShowHarnessMessages();
+}
+
+export function isHarnessFilterAvailable(): boolean {
+  return config.bot.harnessFilterEnabled;
+}
+
 export function getCurrentAgent(): string | undefined {
   return currentSettings.currentAgent;
 }
@@ -333,6 +353,7 @@ function applyInitialSettingsPreset(preset: Record<string, unknown>): void {
     "responseStreamingMode",
     "sendDiffFileAttachments",
     "promptQueueEnabled",
+    "showHarnessMessages",
   ]);
 
   for (const [key, value] of Object.entries(preset)) {
@@ -389,6 +410,10 @@ function applyInitialSettingsPreset(preset: Record<string, unknown>): void {
         case "promptQueueEnabled":
           if (currentSettings.promptQueueEnabled === undefined)
             currentSettings.promptQueueEnabled = value;
+          break;
+        case "showHarnessMessages":
+          if (currentSettings.showHarnessMessages === undefined)
+            currentSettings.showHarnessMessages = value;
           break;
       }
     }

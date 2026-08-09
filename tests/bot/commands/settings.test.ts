@@ -10,6 +10,7 @@ import {
   SETTINGS_COMPACT_OUTPUT_CALLBACK,
   SETTINGS_DIFF_FILES_CALLBACK,
   SETTINGS_PROMPT_QUEUE_CALLBACK,
+  SETTINGS_HARNESS_MESSAGES_CALLBACK,
   SETTINGS_RESPONSE_STREAMING_CALLBACK,
   SETTINGS_THINKING_CONTENT_CALLBACK,
   SETTINGS_TTS_CALLBACK,
@@ -30,6 +31,9 @@ const mocked = vi.hoisted(() => ({
   setTtsModeMock: vi.fn(),
   getPromptQueueEnabledMock: vi.fn(),
   setPromptQueueEnabledMock: vi.fn(),
+  getShowHarnessMessagesMock: vi.fn(),
+  setShowHarnessMessagesMock: vi.fn(),
+  isHarnessFilterAvailableMock: vi.fn(() => false),
   isTtsConfiguredMock: vi.fn(),
 }));
 
@@ -48,6 +52,9 @@ vi.mock("../../../src/app/stores/settings-store.js", () => ({
   setTtsMode: mocked.setTtsModeMock,
   getPromptQueueEnabled: mocked.getPromptQueueEnabledMock,
   setPromptQueueEnabled: mocked.setPromptQueueEnabledMock,
+  getShowHarnessMessages: mocked.getShowHarnessMessagesMock,
+  setShowHarnessMessages: mocked.setShowHarnessMessagesMock,
+  isHarnessFilterAvailable: mocked.isHarnessFilterAvailableMock,
 }));
 
 vi.mock("../../../src/app/services/tts-service.js", () => ({
@@ -70,10 +77,15 @@ describe("bot/commands/settings-command", () => {
     mocked.setTtsModeMock.mockReset();
     mocked.getPromptQueueEnabledMock.mockReset();
     mocked.setPromptQueueEnabledMock.mockReset();
+    mocked.getShowHarnessMessagesMock.mockReset();
+    mocked.setShowHarnessMessagesMock.mockReset();
+    mocked.isHarnessFilterAvailableMock.mockReset();
+    mocked.isHarnessFilterAvailableMock.mockReturnValue(false);
     mocked.isTtsConfiguredMock.mockReset();
     mocked.getResponseStreamingModeMock.mockReturnValue("edit");
     mocked.getSendDiffFileAttachmentsMock.mockReturnValue(true);
     mocked.getShowAssistantRunFooterMock.mockReturnValue(true);
+    mocked.getShowHarnessMessagesMock.mockReturnValue(false);
     mocked.getPromptQueueEnabledMock.mockReturnValue(false);
     interactionManager.clear("settings_test_reset");
   });
@@ -165,6 +177,31 @@ describe("bot/commands/settings-command", () => {
       `${t("settings.response_streaming.label")}: ${t("settings.response_streaming.draft")}`,
     );
   });
+
+  it("shows the harness-messages toggle only when HARNESS_MESSAGE_FILTER is enabled", async () => {
+    mocked.getCompactOutputModeMock.mockReturnValue(true);
+    mocked.getTtsModeMock.mockReturnValue("off");
+    mocked.getShowHarnessMessagesMock.mockReturnValue(false);
+    mocked.isHarnessFilterAvailableMock.mockReturnValue(true);
+
+    const replyMock = vi.fn().mockResolvedValue({ message_id: 10 });
+    const ctx = {
+      chat: { id: 42, type: "private" },
+      message: { text: "/settings" },
+      reply: replyMock,
+    } as unknown as Context;
+
+    await settingsCommand(ctx as never);
+
+    const keyboard = replyMock.mock.calls[0][1].reply_markup.inline_keyboard;
+    const harnessRow = keyboard.find((row: Array<{ text: string }>) =>
+      row[0]?.text.startsWith(t("settings.harness_messages.label")),
+    );
+    expect(harnessRow).toBeDefined();
+    expect(harnessRow[0].text).toBe(
+      `${t("settings.harness_messages.label")}: ${t("settings.value.off")}`,
+    );
+  });
 });
 
 describe("bot/callbacks/settings-callback-handler", () => {
@@ -183,10 +220,15 @@ describe("bot/callbacks/settings-callback-handler", () => {
     mocked.setTtsModeMock.mockReset();
     mocked.getPromptQueueEnabledMock.mockReset();
     mocked.setPromptQueueEnabledMock.mockReset();
+    mocked.getShowHarnessMessagesMock.mockReset();
+    mocked.setShowHarnessMessagesMock.mockReset();
+    mocked.isHarnessFilterAvailableMock.mockReset();
+    mocked.isHarnessFilterAvailableMock.mockReturnValue(false);
     mocked.isTtsConfiguredMock.mockReset();
     mocked.getResponseStreamingModeMock.mockReturnValue("edit");
     mocked.getSendDiffFileAttachmentsMock.mockReturnValue(true);
     mocked.getShowAssistantRunFooterMock.mockReturnValue(true);
+    mocked.getShowHarnessMessagesMock.mockReturnValue(false);
     mocked.getPromptQueueEnabledMock.mockReturnValue(false);
     interactionManager.clear("settings_test_reset");
   });
@@ -335,6 +377,18 @@ describe("bot/callbacks/settings-callback-handler", () => {
     expect(opts?.reply_markup?.inline_keyboard[6][0].text).toBe(
       `${t("settings.prompt_queue.label")}: ${t("settings.value.on")}`,
     );
+  });
+
+  it("toggles the harness-messages setting and returns to settings menu", async () => {
+    mocked.getShowHarnessMessagesMock.mockReturnValueOnce(false).mockReturnValueOnce(true);
+    activateSettingsMenu();
+    const ctx = createCallbackContext(SETTINGS_HARNESS_MESSAGES_CALLBACK);
+
+    const result = await handleSettingsCallback(ctx);
+
+    expect(result).toBe(true);
+    expect(mocked.setShowHarnessMessagesMock).toHaveBeenCalledWith(true);
+    expect(ctx.answerCallbackQuery).toHaveBeenCalledWith({ text: t("settings.saved") });
   });
 
   it("cycles TTS mode and returns to settings menu", async () => {
