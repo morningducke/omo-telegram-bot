@@ -1,7 +1,7 @@
 {
-  "name": "@grinev/opencode-telegram-bot",
+  "name": "omo-telegram-bot",
   "version": "0.23.1",
-  "description": "Telegram bot client for OpenCode to run and monitor coding tasks from chat.",
+  "description": "oh-my-openagent-aware Telegram client for OpenCode to run and monitor coding tasks from chat. Forked from grinev/opencode-telegram-bot.",
   "type": "module",
   "main": "./dist/index.js",
   "bin": {
@@ -35,7 +35,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/grinev/opencode-telegram-bot.git"
+    "url": "git+https://github.com/morningducke/omo-telegram-bot.git"
   },
   "keywords": [
     "opencode",
@@ -43,14 +43,16 @@
     "telegram-bot",
     "grammy",
     "developer-tools",
-    "cli"
+    "cli",
+    "oh-my-openagent",
+    "harness"
   ],
-  "author": "grinev",
+  "author": "morningducke",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/grinev/opencode-telegram-bot/issues"
+    "url": "https://github.com/morningducke/omo-telegram-bot/issues"
   },
-  "homepage": "https://github.com/grinev/opencode-telegram-bot#readme",
+  "homepage": "https://github.com/morningducke/omo-telegram-bot#readme",
   "dependencies": {
     "@google-cloud/text-to-speech": "^6.4.0",
     "@grammyjs/menu": "^1.3.1",

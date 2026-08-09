@@ -1,11 +1,13 @@
-# OpenCode Telegram Bot
+# OpenCode Telegram Bot — oh-my-openagent edition
 
-[![npm version](https://img.shields.io/npm/v/@grinev/opencode-telegram-bot)](https://www.npmjs.com/package/@grinev/opencode-telegram-bot)
-[![CI](https://github.com/grinev/opencode-telegram-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/grinev/opencode-telegram-bot/actions/workflows/ci.yml)
+> **Fork of [grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot)** —
+> tuned for the [oh-my-openagent](https://github.com/code-yeongyu/oh-my-openagent) (OhMyOpenCode) harness.
+> All credit for the original bot goes to [Ruslan Grinev](https://github.com/grinev).
+> This fork stays upstream-mergeable: the additions are isolated behind a config flag and a `/settings` toggle.
+
+[![npm version](https://img.shields.io/npm/v/omo-telegram-bot)](https://www.npmjs.com/package/omo-telegram-bot)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D22.14-brightgreen)](https://nodejs.org)
-[![Follow updates](https://img.shields.io/badge/-Follow%20updates-333333?logo=x)](https://x.com/grin_rus)
-[![Community](https://img.shields.io/badge/Community-Telegram-26A5E4?logo=telegram&logoColor=white)](https://t.me/+Fj_IyKRi6-41MGUy)
 
 OpenCode Telegram Bot is a secure Telegram client for [OpenCode](https://opencode.ai) CLI that runs on your local machine.
 
@@ -23,7 +25,17 @@ Languages: English (`en`), العربية (`ar`), Deutsch (`de`), Español (`es`
   <img src="assets/screencast.gif" width="45%" alt="OpenCode Telegram Bot screencast" />
 </p>
 
-> I use [boardown](https://github.com/grinev/boardown), my open-source Markdown-based task board, to plan and track this project. It stores tasks in plain `.md` files and can be used as a VS Code extension or a desktop app.
+## Why this fork?
+
+If you drive OpenCode with the [oh-my-openagent](https://github.com/code-yeongyu/oh-my-openagent) harness, the original bot's `/messages` list and session previews fill up with harness-injected turns — `[SYSTEM DIRECTIVE: OH-MY-OPENCODE - TODO CONTINUATION]`, ralph/ultrawork loops, boulder continuations, compaction-recovery prompts — because the harness dispatches them as ordinary `role: user` messages. Your real prompts get buried.
+
+This fork adds a **data-driven harness-message filter** that recognises every injected-message kind by stable markers cited from oh-my-openagent source:
+
+- the `<!-- OMO_INTERNAL_INITIATOR -->` / `<!-- OMO_INTERNAL_NOREPLY -->` HTML comments,
+- the `[SYSTEM DIRECTIVE: OH-MY-OPENCODE` text prefix (incl. `ultrawork`/`ulw` lead-ins),
+- and the `metadata.compaction_continue` part flag.
+
+By default these are **hidden** from `/messages` and session previews. A `/settings` toggle ("Show harness messages") and the `HARNESS_MESSAGE_FILTER` env var (master switch) reveal them on demand. Everything else is untouched upstream behaviour.
 
 ## Features
 
@@ -86,10 +98,10 @@ opencode serve
 The fastest way — run directly with `npx`:
 
 ```bash
-npx @grinev/opencode-telegram-bot@latest
+npx omo-telegram-bot@latest
 ```
 
-> **Note:** This README tracks the `main` branch, which may include unreleased changes. The latest npm release may not include every feature described here yet. See [recent commits on `main`](https://github.com/grinev/opencode-telegram-bot/commits/main).
+> **Note:** This README tracks the `main` branch, which may include unreleased changes. The latest npm release may not include every feature described here yet. See [recent commits on `main`](https://github.com/morningducke/omo-telegram-bot/commits/main).
 
 > Quick start is for npm usage. You do not need to clone this repository. If you run this command from the source directory (repository root), it may fail with `opencode-telegram: not found`. To run from sources, use the [Development](#development) section.
 
@@ -98,7 +110,7 @@ If required configuration is not supplied through process environment variables 
 #### Alternative: Global Install
 
 ```bash
-npm install -g @grinev/opencode-telegram-bot
+npm install -g omo-telegram-bot
 opencode-telegram start
 ```
 
@@ -423,7 +435,7 @@ Since the bot runs locally on your machine and connects to your local OpenCode s
 ### Running from Source
 
 ```bash
-git clone https://github.com/grinev/opencode-telegram-bot.git
+git clone https://github.com/morningducke/omo-telegram-bot.git
 cd opencode-telegram-bot
 npm install
 cp .env.example .env
@@ -483,7 +495,7 @@ Please follow commit and release note conventions in [CONTRIBUTING.md](CONTRIBUT
 
 ## Community
 
-Have questions, want to share your experience using the bot, or have an idea for a feature? Join the [Telegram group](https://t.me/+Fj_IyKRi6-41MGUy) for announcements and discussions, or start a thread in [GitHub Discussions](https://github.com/grinev/opencode-telegram-bot/discussions).
+Have questions, want to share your experience using the bot, or have an idea for a feature? Start a thread in [GitHub Discussions](https://github.com/morningducke/omo-telegram-bot/discussions). For the upstream bot's announcements and community, see [grinev's Telegram group](https://t.me/+Fj_IyKRi6-41MGUy).
 
 ## Support
 

@@ -4,7 +4,7 @@ Instructions for AI agents working on this project.
 
 ## About the project
 
-**opencode-telegram-bot** is a Telegram bot that acts as a mobile client for OpenCode.
+**omo-telegram-bot** is a Telegram bot that acts as a mobile client for OpenCode.
 It lets a user run and monitor coding tasks on a local machine through Telegram.
 
 Functional requirements, features, and development status are in [PRODUCT.md](./PRODUCT.md).
