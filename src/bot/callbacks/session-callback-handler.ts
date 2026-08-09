@@ -3,7 +3,8 @@ import { opencodeClient } from "../../opencode/client.js";
 import { resolveProjectAgent } from "../../app/services/agent-selection-service.js";
 import { setCurrentSession } from "../../app/services/session-service.js";
 import type { SessionInfo } from "../../app/types/session.js";
-import { getCurrentProject } from "../../app/stores/settings-store.js";
+import { getCurrentProject, shouldHideHarnessMessages } from "../../app/stores/settings-store.js";
+import { isHarnessMessage, type HarnessMessageLike } from "../../utils/harness-filter.js";
 import { clearAllInteractionState, interactionManager } from "../../app/managers/interaction-manager.js";
 import { keyboardManager } from "../keyboards/keyboard-manager.js";
 import { appendInlineMenuCancelButton, ensureActiveInlineMenu } from "../menus/inline-menu.js";
@@ -363,6 +364,14 @@ async function loadSessionPreview(
         }
 
         if (role === "assistant" && (info as { summary?: boolean }).summary) {
+          return null;
+        }
+
+        if (
+          role === "user" &&
+          shouldHideHarnessMessages() &&
+          isHarnessMessage({ parts } as HarnessMessageLike)
+        ) {
           return null;
         }
 

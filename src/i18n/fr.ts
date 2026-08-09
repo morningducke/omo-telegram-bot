@@ -165,6 +165,7 @@ export const fr: I18nDictionary = {
   "settings.assistant_footer.label": "Pied de réponse",
   "settings.tts.label": "Réponses audio",
   "settings.prompt_queue.label": "File d'attente des messages",
+  "settings.harness_messages.label": "Show harness messages",
   "settings.value.on": "Activé",
   "settings.value.off": "Désactivé",
   "settings.saved": "✅ Paramètre enregistré.",

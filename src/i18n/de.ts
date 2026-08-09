@@ -163,6 +163,7 @@ export const de: I18nDictionary = {
   "settings.assistant_footer.label": "Antwort-Footer",
   "settings.tts.label": "Audioantworten",
   "settings.prompt_queue.label": "Nachrichtenwarteschlange",
+  "settings.harness_messages.label": "Show harness messages",
   "settings.value.on": "Ein",
   "settings.value.off": "Aus",
   "settings.saved": "✅ Einstellung gespeichert.",

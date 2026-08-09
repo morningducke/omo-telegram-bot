@@ -29,10 +29,12 @@ const mocked = vi.hoisted(() => ({
   attachToSessionMock: vi.fn(),
   setCurrentSessionMock: vi.fn(),
   ingestSessionInfoForCacheMock: vi.fn(),
+  hideHarnessMessages: false,
 }));
 
 vi.mock("../../../src/app/stores/settings-store.js", () => ({
   getCurrentProject: vi.fn(() => mocked.currentProject),
+  shouldHideHarnessMessages: vi.fn(() => mocked.hideHarnessMessages),
 }));
 
 vi.mock("../../../src/app/services/session-service.js", () => ({
@@ -275,6 +277,75 @@ describe("bot/commands/messages", () => {
     expect(state?.metadata.messages).toEqual([
       { id: "msg-1", text: "first message", created: time1 },
     ]);
+  });
+
+  it("hides oh-my-openagent harness messages from the list when filtering is on", async () => {
+    mocked.hideHarnessMessages = true;
+    const genuineTime = new Date(2026, 4, 30, 9, 0).getTime();
+    const harnessTime = new Date(2026, 4, 30, 10, 0).getTime();
+
+    mocked.sessionMessagesMock.mockResolvedValue({
+      data: [
+        makeUserMessage("genuine", "Fix the login bug", genuineTime),
+        makeUserMessage(
+          "harness-directive",
+          "[SYSTEM DIRECTIVE: OH-MY-OPENCODE - TODO CONTINUATION]\n\nKeep working.\n<!-- OMO_INTERNAL_INITIATOR -->",
+          harnessTime,
+        ),
+        makeUserMessage("harness-continue", "continue\n<!-- OMO_INTERNAL_INITIATOR -->", harnessTime + 1),
+      ],
+      error: null,
+    });
+    mocked.sessionGetMock.mockResolvedValue({
+      data: { id: "session-1", directory: "D:\\Projects\\Repo" },
+      error: null,
+    });
+
+    const ctx = createCommandContext(203);
+    await messagesCommand(ctx as never);
+
+    const [, options] = (ctx.reply as ReturnType<typeof vi.fn>).mock.calls[0] as [
+      string,
+      { reply_markup: { inline_keyboard: Array<Array<{ callback_data?: string; text: string }>> } },
+    ];
+
+    expect(options.reply_markup.inline_keyboard[0]?.[0]?.text).toContain("Fix the login bug");
+    expect(options.reply_markup.inline_keyboard[1]?.[0]?.callback_data).toBe("messages:cancel");
+
+    const state = interactionManager.getSnapshot();
+    expect(state?.metadata.messages).toEqual([
+      { id: "genuine", text: "Fix the login bug", created: genuineTime },
+    ]);
+
+    mocked.hideHarnessMessages = false;
+  });
+
+  it("shows harness messages when filtering is off", async () => {
+    mocked.hideHarnessMessages = false;
+    const genuineTime = new Date(2026, 4, 30, 9, 0).getTime();
+    const harnessTime = new Date(2026, 4, 30, 10, 0).getTime();
+
+    mocked.sessionMessagesMock.mockResolvedValue({
+      data: [
+        makeUserMessage("genuine", "Fix the login bug", genuineTime),
+        makeUserMessage(
+          "harness-directive",
+          "[SYSTEM DIRECTIVE: OH-MY-OPENCODE - TODO CONTINUATION]\n<!-- OMO_INTERNAL_INITIATOR -->",
+          harnessTime,
+        ),
+      ],
+      error: null,
+    });
+    mocked.sessionGetMock.mockResolvedValue({
+      data: { id: "session-1", directory: "D:\\Projects\\Repo" },
+      error: null,
+    });
+
+    const ctx = createCommandContext(204);
+    await messagesCommand(ctx as never);
+
+    const state = interactionManager.getSnapshot();
+    expect(state?.metadata.messages).toHaveLength(2);
   });
 
   it("handles pagination callbacks", async () => {

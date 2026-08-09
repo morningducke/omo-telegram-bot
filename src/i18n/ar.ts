@@ -156,6 +156,7 @@ export const ar: I18nDictionary = {
   "settings.assistant_footer.label": "تذييل الرد",
   "settings.tts.label": "الردود الصوتية",
   "settings.prompt_queue.label": "قائمة انتظار الرسائل",
+  "settings.harness_messages.label": "Show harness messages",
   "settings.value.on": "مفعّل",
   "settings.value.off": "معطّل",
   "settings.saved": "✅ تم حفظ الإعداد.",

@@ -155,6 +155,7 @@ export const en = {
   "settings.assistant_footer.label": "Assistant footer",
   "settings.tts.label": "Audio replies",
   "settings.prompt_queue.label": "Message queue",
+  "settings.harness_messages.label": "Show harness messages",
   "settings.value.on": "On",
   "settings.value.off": "Off",
   "settings.saved": "✅ Setting saved.",

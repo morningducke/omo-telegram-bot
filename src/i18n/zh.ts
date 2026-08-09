@@ -143,6 +143,7 @@ export const zh: I18nDictionary = {
   "settings.assistant_footer.label": "回复页脚",
   "settings.tts.label": "语音回复",
   "settings.prompt_queue.label": "消息队列",
+  "settings.harness_messages.label": "Show harness messages",
   "settings.value.on": "开启",
   "settings.value.off": "关闭",
   "settings.saved": "✅ 设置已保存。",

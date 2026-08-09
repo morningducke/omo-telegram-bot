@@ -23,6 +23,7 @@ export interface Settings {
   responseStreamingMode?: ResponseStreamingMode;
   sendDiffFileAttachments?: boolean;
   promptQueueEnabled?: boolean;
+  showHarnessMessages?: boolean;
   sessionDirectoryCache?: SessionDirectoryCacheInfo;
   scheduledTasks?: ScheduledTask[];
   scheduledTaskSessionIgnores?: ScheduledTaskSessionIgnoreInfo[];
