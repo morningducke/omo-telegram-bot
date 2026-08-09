@@ -35,6 +35,8 @@ describe("bot/routers/command-router", () => {
       "sessions",
       "messages",
       "replies",
+      "dialogue",
+      "end",
       "new",
       "abort",
       "detach",

@@ -59,6 +59,11 @@ import { ResponseStreamer, type StreamingMessagePayload } from "../streaming/res
 import { ToolCallStreamer, type ToolStreamKey } from "../streaming/tool-call-streamer.js";
 import { RunningToolTracker, type RunningToolTick } from "../streaming/running-tool-tracker.js";
 import { CompactProgressStreamer } from "../streaming/compact-progress-streamer.js";
+import {
+  finalizeDialogueReply,
+  isDialogueStreamActiveForSession,
+  streamDialogueReply,
+} from "../streaming/transcript-renderer.js";
 import { attachManager } from "../../app/managers/attach-manager.js";
 import {
   markAttachedSessionBusy,
@@ -534,6 +539,11 @@ class EventSubscriptionService implements BotEventSubscriptionService {
         return;
       }
 
+      if (isDialogueStreamActiveForSession(sessionId)) {
+        streamDialogueReply(this.botInstance.api, this.chatIdInstance, sessionId, messageText);
+        return;
+      }
+
       if (isCompactProgressMode()) {
         void this.finalizeCompactProgress(sessionId)
           .then(() => {
@@ -602,6 +612,18 @@ class EventSubscriptionService implements BotEventSubscriptionService {
         const chatId = this.chatIdInstance;
 
         try {
+          if (isDialogueStreamActiveForSession(sessionId)) {
+            assistantRunState.markResponseCompleted(sessionId, {
+              agent: completionInfo.agent,
+              providerID: completionInfo.providerID,
+              modelID: completionInfo.modelID,
+            });
+            streamDialogueReply(botApi, chatId, sessionId, messageText);
+            finalizeDialogueReply(botApi, chatId, sessionId);
+            clearPromptResponseMode(sessionId);
+            return;
+          }
+
           assistantRunState.markResponseCompleted(sessionId, {
             agent: completionInfo.agent,
             providerID: completionInfo.providerID,

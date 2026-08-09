@@ -22,6 +22,8 @@ import { safeBackgroundTask } from "../../utils/safe-background-task.js";
 import { formatErrorDetails } from "../../utils/error-format.js";
 import { logger } from "../../utils/logger.js";
 import { t } from "../../i18n/index.js";
+import { dialogueManager } from "../../app/managers/dialogue-manager.js";
+import { handleDialoguePrompt } from "../streaming/transcript-renderer.js";
 import { foregroundSessionState } from "../../app/managers/foreground-session-state-manager.js";
 import { assistantRunState } from "../../app/managers/assistant-run-state-manager.js";
 import {
@@ -328,6 +330,14 @@ export async function processUserPrompt(
     logger.info(
       `[Bot] Calling session.promptAsync (start-only) with agent=${currentAgent}, fileCount=${filePartCount}...`,
     );
+
+    if (
+      dialogueManager.isActive() &&
+      dialogueManager.matchesSession(currentSession.id) &&
+      text.trim().length > 0
+    ) {
+      await handleDialoguePrompt(ctx.api, ctx.chat!.id, currentSession.id, text);
+    }
 
     foregroundSessionState.markBusy(currentSession.id, currentSession.directory);
     await markAttachedSessionBusy(currentSession.id);

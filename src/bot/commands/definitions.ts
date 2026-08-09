@@ -28,6 +28,8 @@ const COMMAND_DEFINITIONS: BotCommandI18nDefinition[] = [
   { command: "sessions", descriptionKey: "cmd.description.sessions" },
   { command: "messages", descriptionKey: "cmd.description.messages" },
   { command: "replies", descriptionKey: "cmd.description.replies" },
+  { command: "dialogue", descriptionKey: "cmd.description.dialogue" },
+  { command: "end", descriptionKey: "cmd.description.end" },
   { command: "settings", descriptionKey: "cmd.description.settings" },
   { command: "projects", descriptionKey: "cmd.description.projects" },
   { command: "worktree", descriptionKey: "cmd.description.worktree" },
