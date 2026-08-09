@@ -11,10 +11,10 @@ const EXIT_RUNTIME_ERROR = 1;
 const EXIT_INVALID_ARGS = 2;
 
 const CLI_USAGE = `Usage:
-  opencode-telegram [start] [--daemon] [--mode installed]
-  opencode-telegram status
-  opencode-telegram stop
-  opencode-telegram config
+  omo-telegram [start] [--daemon] [--mode installed]
+  omo-telegram status
+  omo-telegram stop
+  omo-telegram config
 
 Notes:
   - No command defaults to start
@@ -23,7 +23,7 @@ Notes:
 
 const CLI_MESSAGES = {
   daemonRequiresInstalled:
-    "Daemon mode is supported only for the installed runtime. Use `opencode-telegram start` for foreground source runs.",
+    "Daemon mode is supported only for the installed runtime. Use `omo-telegram start` for foreground source runs.",
   unknownServiceError: "Unknown service error.",
   cleanupStale: "Removed stale daemon state file.",
   cleanupInvalid: "Removed invalid daemon state file.",

@@ -501,7 +501,7 @@ export const pt: I18nDictionary = {
   "runtime.wizard.not_configured_starting":
     "O aplicativo ainda não foi configurado. Iniciando o assistente...\n",
   "runtime.wizard.tty_required":
-    "O assistente interativo requer um terminal TTY. Execute `opencode-telegram config` em um shell interativo.",
+    "O assistente interativo requer um terminal TTY. Execute `omo-telegram config` em um shell interativo.",
 
   "rename.no_session": "⚠️ Nenhuma sessão ativa. Crie ou selecione uma sessão primeiro.",
   "rename.prompt": "📝 Digite o novo título da sessão:\n\nAtual: {title}",

@@ -103,7 +103,7 @@ npx omo-telegram-bot@latest
 
 > **Note:** This README tracks the `main` branch, which may include unreleased changes. The latest npm release may not include every feature described here yet. See [recent commits on `main`](https://github.com/morningducke/omo-telegram-bot/commits/main).
 
-> Quick start is for npm usage. You do not need to clone this repository. If you run this command from the source directory (repository root), it may fail with `opencode-telegram: not found`. To run from sources, use the [Development](#development) section.
+> Quick start is for npm usage. You do not need to clone this repository. If you run this command from the source directory (repository root), it may fail with `omo-telegram: not found`. To run from sources, use the [Development](#development) section.
 
 If required configuration is not supplied through process environment variables or an `.env` file, an interactive wizard will guide you through setup. It asks for interface language first, then your bot token, user ID, OpenCode API URL, and optional OpenCode server credentials (username/password). After that, you're ready to go. Open your bot in Telegram and start sending tasks.
 
@@ -111,7 +111,7 @@ If required configuration is not supplied through process environment variables 
 
 ```bash
 npm install -g omo-telegram-bot
-opencode-telegram start
+omo-telegram start
 ```
 
 `start` runs in the foreground by default. This is the recommended mode for `systemd`, Docker, local debugging, and other external process managers.
@@ -119,19 +119,19 @@ opencode-telegram start
 To run the bot in the built-in background mode instead:
 
 ```bash
-opencode-telegram start --daemon
-opencode-telegram status
-opencode-telegram stop
+omo-telegram start --daemon
+omo-telegram status
+omo-telegram stop
 ```
 
-> Built-in daemon mode is intended for standalone npm installs without an external supervisor. For `systemd`, `pm2`, or Docker, keep using `opencode-telegram start` without `--daemon`.
+> Built-in daemon mode is intended for standalone npm installs without an external supervisor. For `systemd`, `pm2`, or Docker, keep using `omo-telegram start` without `--daemon`.
 
 For Linux `systemd` setup, see [`docs/LINUX_SYSTEMD_SETUP.md`](./docs/LINUX_SYSTEMD_SETUP.md).
 
 To reconfigure at any time:
 
 ```bash
-opencode-telegram config
+omo-telegram config
 ```
 
 ## Supported Platforms
@@ -436,7 +436,7 @@ Since the bot runs locally on your machine and connects to your local OpenCode s
 
 ```bash
 git clone https://github.com/morningducke/omo-telegram-bot.git
-cd opencode-telegram-bot
+cd omo-telegram-bot
 npm install
 cp .env.example .env
 # Edit .env with your bot token, user ID, and model settings
@@ -486,7 +486,7 @@ npm run dev
 
 **Linux: permission denied errors**
 
-- Make sure the CLI binary has execute permission: `chmod +x $(which opencode-telegram)`
+- Make sure the CLI binary has execute permission: `chmod +x $(which omo-telegram)`
 - Check that the config directory is writable: `~/.config/opencode-telegram-bot/`
 
 ## Contributing

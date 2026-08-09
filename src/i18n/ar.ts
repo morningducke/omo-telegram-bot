@@ -471,7 +471,7 @@ export const ar: I18nDictionary = {
   "runtime.wizard.not_configured_starting":
     "لم يتم إعداد التطبيق بعد. جارٍ تشغيل معالج الإعداد...\n",
   "runtime.wizard.tty_required":
-    "يتطلب معالج الإعداد التفاعلي طرفية TTY. شغّل `opencode-telegram config` في shell تفاعلية.",
+    "يتطلب معالج الإعداد التفاعلي طرفية TTY. شغّل `omo-telegram config` في shell تفاعلية.",
 
   "rename.no_session": "⚠️ لا توجد جلسة نشطة. أنشئ جلسة أو اختر واحدة أولًا.",
   "rename.prompt": "📝 أدخل عنوانًا جديدًا للجلسة:\n\nالحالي: {title}",
