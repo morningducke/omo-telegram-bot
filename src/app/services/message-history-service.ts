@@ -89,6 +89,44 @@ export async function loadUserMessages(
   return messages;
 }
 
+export async function loadAssistantMessages(
+  sessionId: string,
+  directory: string,
+): Promise<UserMessageItem[]> {
+  const { data, error } = await opencodeClient.session.messages({
+    sessionID: sessionId,
+    directory,
+  });
+
+  if (error || !data) {
+    throw error || new Error("No message data received");
+  }
+
+  return (data as SessionMessageLike[])
+    .map((message) => {
+      if (message.info.role !== "assistant") {
+        return null;
+      }
+
+      if (message.info.summary) {
+        return null;
+      }
+
+      const text = extractTextParts(message.parts);
+      if (!text) {
+        return null;
+      }
+
+      return {
+        id: message.info.id ?? `${message.info.time?.created ?? 0}`,
+        text,
+        created: message.info.time?.created ?? 0,
+      } satisfies UserMessageItem;
+    })
+    .filter((message): message is UserMessageItem => Boolean(message))
+    .sort((a, b) => b.created - a.created);
+}
+
 export async function loadLatestAssistantResponse(
   sessionId: string,
   directory: string,

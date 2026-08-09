@@ -23,6 +23,7 @@ import { handleProjectSelect } from "./project-callback-handler.js";
 import { handlePromptAttachmentCancel } from "./prompt-attachment-callback-handler.js";
 import { handleQuestionCallback } from "./question-callback-handler.js";
 import { handleRenameCancel } from "./rename-callback-handler.js";
+import { handleRepliesCallback } from "./replies-callback-handler.js";
 import { handleSettingsCallback } from "./settings-callback-handler.js";
 import {
   handleBackgroundSessionOpen,
@@ -172,6 +173,10 @@ export function registerCallbackRouter(bot: Bot<Context>, deps: CallbackRouterDe
     [
       "rename",
       { name: "rename", handlers: [handleRenameCancel], errorScope: "rename" },
+    ],
+    [
+      "replies",
+      { name: "replies", handlers: [handleRepliesCallback], errorScope: "interaction" },
     ],
     [
       "session",
