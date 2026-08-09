@@ -230,8 +230,8 @@ export const config = {
     // Short messages are processed immediately; 0 disables merging entirely.
     messageMergeWindowMs: getOptionalNonNegativeIntEnvVar("MESSAGE_MERGE_WINDOW_MS", 1500),
     // Master switch for harness-message filtering; the /settings toggle still
-    // controls visibility when this is enabled (default: true).
-    harnessFilterEnabled: getOptionalBooleanEnvVar("HARNESS_MESSAGE_FILTER", true),
+    // controls visibility when this is enabled (default: false, opt-in).
+    harnessFilterEnabled: getOptionalBooleanEnvVar("HARNESS_MESSAGE_FILTER", false),
     initialSettingsPreset: parseInitialSettingsPreset(),
   },
   files: {
