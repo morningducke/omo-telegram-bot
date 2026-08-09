@@ -51,6 +51,7 @@ jobs:
 
           STABLE_PATTERN='^[0-9]+\.[0-9]+\.[0-9]+$'
           RC_PATTERN='^[0-9]+\.[0-9]+\.[0-9]+-rc\.[0-9]+$'
+          OMO_PATTERN='^[0-9]+\.[0-9]+\.[0-9]+-omo\.[0-9]+$'
 
           if [[ "$CURRENT_VERSION" =~ $STABLE_PATTERN ]]; then
             echo "dist_tag=latest" >> "$GITHUB_OUTPUT"
@@ -60,9 +61,13 @@ jobs:
             echo "dist_tag=next" >> "$GITHUB_OUTPUT"
             echo "is_prerelease=true" >> "$GITHUB_OUTPUT"
             echo "release_kind=rc" >> "$GITHUB_OUTPUT"
+          elif [[ "$CURRENT_VERSION" =~ $OMO_PATTERN ]]; then
+            echo "dist_tag=latest" >> "$GITHUB_OUTPUT"
+            echo "is_prerelease=true" >> "$GITHUB_OUTPUT"
+            echo "release_kind=omo" >> "$GITHUB_OUTPUT"
           else
             echo "Unsupported version format: $CURRENT_VERSION"
-            echo "Allowed formats: X.Y.Z and X.Y.Z-rc.N"
+            echo "Allowed formats: X.Y.Z, X.Y.Z-rc.N, X.Y.Z-omo.N"
             exit 1
           fi
 
@@ -142,6 +147,8 @@ jobs:
 
       - name: Publish to npm
         if: steps.determine.outputs.should_release == 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           if [ "${{ github.event.repository.private }}" = "true" ]; then
             echo "Private repository detected: publishing without provenance"
